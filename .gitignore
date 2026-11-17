@@ -1,0 +1,13 @@
+# basura del sistema
+.DS_Store
+# archivos de bloqueo de Word
+~$*
+# logs que se regeneran
+laboratorio/logs/*.log
+# guias de exposicion (no se publican)
+Guia_Exposicion.html
+Guia_Ataques.html
+# rubrica del curso
+Entregables Requeridos para Proyectos de Ciberseguridad 2026 akira.docx
+# imagen suelta
+WhatsApp Image*.jpeg

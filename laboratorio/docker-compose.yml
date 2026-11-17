@@ -1,0 +1,26 @@
+# Laboratorio WAF: el mismo sitio vulnerable expuesto dos veces
+#   :8081  -> app directa (SIN WAF, solo para comparar)
+#   :8080  -> WAF ModSecurity + OWASP CRS -> app (CON WAF)
+#   :9090  -> panel de monitoreo (lee el log del WAF)
+services:
+  app:
+    build: ./app
+    ports: ["8081:80"]
+
+  waf:
+    image: owasp/modsecurity-crs:apache
+    ports: ["8080:8080"]
+    environment:
+      BACKEND: http://app:80
+      MODSEC_RULE_ENGINE: ${WAF_MODE:-On}   # On | DetectionOnly | Off
+      BLOCKING_PARANOIA: ${PARANOIA:-1}
+      MODSEC_AUDIT_LOG: /var/log/waf/audit.log
+    volumes: ["./logs:/var/log/waf"]
+    depends_on: [app]
+
+  panel:
+    image: php:8.3-apache
+    ports: ["9090:80"]
+    volumes:
+      - ./panel:/var/www/html:ro
+      - ./logs:/logs:ro
